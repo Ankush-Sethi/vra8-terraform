@@ -1,18 +1,22 @@
-provider "kubernetes" {
-  config_path = "config"
+terraform {
+  required_providers {
+    random = {
+      source = "hashicorp/random"
+      version = "3.1.0"
+    }
+  }
 }
 
+resource "random_string" "random" {
+  length           = 8
+  special          = false
+  override_special = "/@£$"
+}
 
-resource "kubernetes_namespace" "example" {
-  metadata {
-    annotations = {
-      name = "namespace-created-by-vra8-terraform"
-    }
+output "random-uuid" {
+  value = uuid()
+}
 
-    labels = {
-      mylabel = "label-value"
-    }
-
-    name = "namespace-created-by-vra8-terraform"
-  }
+output "random-string" {
+  value = random_string.random.id
 }
